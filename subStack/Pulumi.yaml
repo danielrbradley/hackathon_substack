@@ -1,0 +1,11 @@
+name: substack
+description: A Pulumi YAML program to deploy a serverless application on AWS
+runtime: yaml
+resources:
+  my-bucket:
+    type: aws:s3:Bucket
+    properties:
+      tags:
+        Stack: ${stack}
+outputs:
+  domainName: ${my-bucket.bucketDomainName}
