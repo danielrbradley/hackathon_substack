@@ -9,7 +9,8 @@ const substack1 = new pulumi.Stack("sub1", {
 });
 
 const substack2 = new pulumi.Stack("sub2", {
-  source: "subStack",
+  source:
+    "https://github.com/danielrbradley/hackathon_substack/tree/master/subStack",
   prefixResourceNames: true,
   inputs: {
     stack: substack1.outputs.domainName,
