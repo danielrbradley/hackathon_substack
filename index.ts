@@ -1,7 +1,6 @@
 import * as pulumi from "@pulumi/pulumi";
-import { SubStack } from "@pulumi/pulumi/runtime/subStack";
 
-const substack1 = new SubStack("sub1", {
+const substack1 = new pulumi.Stack("sub1", {
   source: "subStack",
   prefixResourceNames: true,
   inputs: {
@@ -9,7 +8,7 @@ const substack1 = new SubStack("sub1", {
   },
 });
 
-const substack2 = new SubStack("sub2", {
+const substack2 = new pulumi.Stack("sub2", {
   source: "subStack",
   prefixResourceNames: true,
   inputs: {
