@@ -1,5 +1,5 @@
 import * as aws from "@pulumi/aws";
-import { ComponentResource, ComponentResourceOptions, Input, Output } from "@pulumi/pulumi";
+import { ComponentResource, ComponentResourceOptions, Input, Output, interpolate } from "@pulumi/pulumi";
 
 export interface VpcArgs {
     description: string;
@@ -59,6 +59,8 @@ export class Vpc extends ComponentResource {
 
         this.name = name;
         this.baseTags = args.baseTags;
+
+        const awsRegion = aws.getRegionOutput().name;
 
         // VPC
         this.vpc = new aws.ec2.Vpc(`${name}-vpc`, {
@@ -177,7 +179,7 @@ export class Vpc extends ComponentResource {
         if (args.endpoints.s3) {
             new aws.ec2.VpcEndpoint(`${name}-s3-endpoint`, {
                 vpcId: this.vpc.id,
-                serviceName: `com.amazonaws.${aws.config.region}.s3`,
+                serviceName: interpolate`com.amazonaws.${awsRegion}.s3`,
                 routeTableIds: [this.publicRouteTable.id, ...this.privateRouteTables.map(x => x.id)],
             }, { parent: this.vpc });
         }
@@ -185,7 +187,7 @@ export class Vpc extends ComponentResource {
         if (args.endpoints.dynamodb) {
             new aws.ec2.VpcEndpoint(`${name}-dynamodb-endpoint`, {
                 vpcId: this.vpc.id,
-                serviceName: `com.amazonaws.${aws.config.region}.dynamodb`,
+                serviceName: interpolate`com.amazonaws.${awsRegion}.dynamodb`,
                 routeTableIds: [this.publicRouteTable.id, ...this.privateRouteTables.map(x => x.id)],
             }, { parent: this.vpc });
         }
