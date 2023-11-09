@@ -33,6 +33,8 @@ Run `pulumi up`
 
 Run `pulumi destroy`
 
+Note: The ECR Repository might refuse to be deleted until the images uploaded to it have been manualy deleted.
+
 ## Deployed Resources
 
 ![Graph of deployed resources](stack-graph.png)
