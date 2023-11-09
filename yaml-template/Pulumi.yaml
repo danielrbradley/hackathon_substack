@@ -1,4 +1,4 @@
-name: yaml-template
+name: two-stacks-yaml
 description: Run a template from YAML
 runtime: yaml
 resources:
@@ -7,6 +7,8 @@ resources:
     properties:
       source: static-website-aws-csharp
       inputs:
+        path: "./site"
+        indexDocument: "index.html"
 
 outputs:
   website: ${website.outputs}
