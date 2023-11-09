@@ -1,7 +1,7 @@
 import * as pulumi from "@pulumi/pulumi";
 
 const sub1 = new pulumi.Program("sub1", {
-  source: "subStack",
+  source: "../subStack",
   prefixResourceNames: true,
   inputs: {
     stack: pulumi.getStack(),

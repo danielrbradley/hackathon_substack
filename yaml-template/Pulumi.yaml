@@ -1,0 +1,13 @@
+name: yaml-template
+description: Run a template from YAML
+runtime: yaml
+resources:
+  website:
+    type: pulumi:pulumi:Program
+    properties:
+      source: static-website-aws-csharp
+      inputs:
+
+outputs:
+  website: ${website.outputs}
+  url: ${website.outputs["cdnURL"]}

@@ -1,0 +1,35 @@
+Arguments: 
+  /Users/dan/.nodenv/versions/18.14.0/bin/node /Users/dan/.yarn/bin/yarn.js
+
+PATH: 
+  /Users/dan/.nodenv/versions/18.14.0/bin:/opt/homebrew/Cellar/nodenv/1.4.0/libexec:/Users/dan/.yarn/bin:/Users/dan/.config/yarn/global/node_modules/.bin:/Users/dan/.nodenv/shims:/Users/dan/go/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/usr/local/share/dotnet:~/.dotnet/tools:/usr/local/go/bin:/Users/dan/.yarn/bin:/Users/dan/.config/yarn/global/node_modules/.bin:/Users/dan/.nodenv/shims:/Users/dan/go/bin:/opt/homebrew/bin:/opt/homebrew/sbin
+
+Yarn version: 
+  1.22.19
+
+Node version: 
+  18.14.0
+
+Platform: 
+  darwin arm64
+
+Trace: 
+  Error: ENOENT: no such file or directory, stat '/Users/dan/Dev/hackathon_substack/two-stacks-ts/node_modules/@pulumi/pulumi'
+
+npm manifest: 
+  {
+      "name": "hackathon_substack",
+      "main": "index.ts",
+      "devDependencies": {
+          "@types/node": "^16"
+      },
+      "dependencies": {
+          "@pulumi/pulumi": "^3.0.0"
+      }
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile
