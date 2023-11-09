@@ -6,7 +6,13 @@ import * as random from "@pulumi/random";
 const config = new Config();
 
 export const dbUsername = config.require("dbUsername");
-export const dbPassword = config.requireSecret("dbPassword");
+export const dbPassword =
+    config.getSecret("dbPassword") ??
+    new random.RandomString(
+        "dbPassword",
+        { length: 20 },
+        { additionalSecretOutputs: ["result"] }
+    ).result;
 export const dbName = config.require("dbName");
 const dataVpcPrivateSubnetIds = config.requireObject("dataVpcPrivateSubnetIds") as string[];
 const peeredSecurityGroupId = config.require("peeredSecurityGroupId");
@@ -32,8 +38,8 @@ const rds = new RdsInstance("db-instance", {
     initalDbName: dbName,
 
     allocatedStorage: 40,
-    engineVersion: "11.4",
-    instanceClass: aws.rds.InstanceTypes.R3_Large,
+    engineVersion: "15.3",
+    instanceClass: aws.rds.InstanceTypes.R5_Large,
     storageType: "gp2",
 
     finalSnapshotIdentifier: finalSnapshotIdentifier,

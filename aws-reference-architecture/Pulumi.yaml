@@ -15,10 +15,10 @@ resources:
       source: ./database
       inputs:
         dbUsername: ${dbUsername}
-        dbPassword: ${dbPassword}
         dbName: ${dbName}
         dataVpcPrivateSubnetIds: ${networking.outputs["dataVpcPrivateSubnetIds"]}
         peeredSecurityGroupId: ${networking.outputs["peeredSecurityGroupId"]}
 
 outputs:
   networking: ${networking.outputs}
+  database: ${database.outputs}

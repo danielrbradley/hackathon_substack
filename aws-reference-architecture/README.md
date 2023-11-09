@@ -21,9 +21,9 @@ The system has the following layers:
 
 1. Set AWS region: `pulumi config set aws:region us-west-2`
 1. Set database credentials:
-    - `pulumi config set --secret dbUsername admin`
-    - `pulumi config set --secret dbPassword $(openssl rand -base64 12)`
-    - `pulumi config set dbName mydb`
+    - `pulumi config set dbUsername dbAdmin`
+    - `pulumi config set --secret dbPassword $(openssl rand -base64 24)`
+    - `pulumi config set dbName mainDb`
 
 ## Deploying
 
