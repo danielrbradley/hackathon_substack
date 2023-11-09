@@ -28,3 +28,11 @@ The system has the following layers:
 ## Deploying
 
 Run `pulumi up`
+
+## Clean up
+
+Run `pulumi destroy`
+
+## Deployed Resources
+
+![Graph of deployed resources](stack-graph.png)
