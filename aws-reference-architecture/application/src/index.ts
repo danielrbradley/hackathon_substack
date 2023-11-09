@@ -1,11 +1,8 @@
-import * as awsx from "@pulumi/awsx";
-import { Config, getStack, StackReference } from "@pulumi/pulumi";
+import { classic as awsx } from "@pulumi/awsx";
+import { Config, getStack } from "@pulumi/pulumi";
 import {Application} from "./application";
 
 const config = new Config();
-
-const networkingStack = new StackReference(config.require("networkingStack"));
-const databaseStack = new StackReference(config.require("databaseStack"));
 
 const baseTags = {
     Project: "Pulumi Demo",
@@ -16,22 +13,22 @@ const app = new Application("app", {
     description: `${baseTags.Project} Application`,
     baseTags: baseTags,
 
-    vpcId: networkingStack.getOutput("appVpcId"),
+    vpcId: config.require("appVpcId"),
 
     // ALB in public subnets
-    albSubnetIds:  networkingStack.getOutput("appVpcPublicSubnetIds"),
+    albSubnetIds:  config.requireObject("appVpcPublicSubnetIds"),
 
     // App resources in private subnets
-    appSubnetIds:  networkingStack.getOutput("appVpcPrivateSubnetIds"),
+    appSubnetIds:  config.requireObject("appVpcPrivateSubnetIds"),
 
     appImage: awsx.ecs.Image.fromPath("app", "./src/backend"),
     appPort: 80,
 
-    dbName: databaseStack.getOutput("dbName"),
-    dbUsername: databaseStack.getOutput("dbUsername"),
-    dbPassword: databaseStack.getOutput("dbPassword"),
-    dbPort: databaseStack.getOutput("dbPort"),
-    dbHost: databaseStack.getOutput("dbAddress"),
+    dbName: config.require("dbName"),
+    dbUsername: config.require("dbUsername"),
+    dbPassword: config.requireSecret("dbPassword"),
+    dbPort: config.require("dbPort"),
+    dbHost: config.require("dbAddress"),
 });
 
 export const albAddress = app.albAddress();

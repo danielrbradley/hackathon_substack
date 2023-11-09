@@ -1,5 +1,5 @@
 import * as aws from "@pulumi/aws";
-import * as awsx from "@pulumi/awsx";
+import { classic as awsx } from "@pulumi/awsx";
 import { ComponentResource, ComponentResourceOptions, Input, Output } from "@pulumi/pulumi";
 
 export interface ApplicationArgs {
@@ -45,8 +45,8 @@ export interface ApplicationResources {
 }
 
 export class Application extends ComponentResource {
-    applicationLoadBalancer: awsx.elasticloadbalancingv2.ApplicationLoadBalancer;
-    applicationListener: awsx.elasticloadbalancingv2.ApplicationListener;
+    applicationLoadBalancer: awsx.lb.ApplicationLoadBalancer;
+    applicationListener: awsx.lb.ApplicationListener;
     cluster: awsx.ecs.Cluster;
     fargateService: awsx.ecs.FargateService;
 
@@ -60,6 +60,8 @@ export class Application extends ComponentResource {
     constructor(name: string, args: ApplicationArgs, opts?: ComponentResourceOptions) {
         super("application", name, {}, opts);
 
+        const region = aws.getRegionOutput().name;
+
         const vpc = awsx.ec2.Vpc.fromExistingIds(`${name}-service-vpc`, {
             vpcId: args.vpcId,
         }, { parent: this });
@@ -71,7 +73,7 @@ export class Application extends ComponentResource {
             }, { parent: vpc }),
         ];
 
-        this.applicationLoadBalancer = new awsx.elasticloadbalancingv2.ApplicationLoadBalancer(`${name}-service-alb`, {
+        this.applicationLoadBalancer = new awsx.lb.ApplicationLoadBalancer(`${name}-service-alb`, {
             vpc: vpc,
             external: true,
             subnets: args.albSubnetIds,
@@ -82,7 +84,7 @@ export class Application extends ComponentResource {
             },
         }, { parent: this });
 
-        this.applicationListener = new awsx.elasticloadbalancingv2.ApplicationListener(`${name}-service-alb-listener`, {
+        this.applicationListener = new awsx.lb.ApplicationListener(`${name}-svc-alb-listener`, {
             vpc: vpc,
             loadBalancer: this.applicationLoadBalancer,
             port: args.appPort,
@@ -117,6 +119,11 @@ export class Application extends ComponentResource {
             }, { parent: vpc }),
         ];
 
+        const serviceLogs = new aws.cloudwatch.LogGroup(`${name}-service-logs`, {
+            name: `/ecs/${name}-service`,
+            retentionInDays: 7,
+        }, { parent: this });
+
         this.fargateService = new awsx.ecs.FargateService(`${name}-service`, {
             cluster: this.cluster,
             assignPublicIp: false,
@@ -129,6 +136,14 @@ export class Application extends ComponentResource {
                         ...args.appResources, // cpu, memory, etc.
                         image: args.appImage,
                         portMappings: [this.applicationListener],
+                        logConfiguration: {
+                            logDriver: "awslogs",
+                            options: {
+                                "awslogs-group": serviceLogs.name,
+                                "awslogs-region": region,
+                                "awslogs-stream-prefix": "ecs",
+                            },
+                        },
                         environment: [
                             {
                                 name: "DB_HOST",

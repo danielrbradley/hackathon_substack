@@ -19,6 +19,21 @@ resources:
         dataVpcPrivateSubnetIds: ${networking.outputs["dataVpcPrivateSubnetIds"]}
         peeredSecurityGroupId: ${networking.outputs["peeredSecurityGroupId"]}
 
+  app:
+    type: pulumi:pulumi:Program
+    properties:
+      source: ./application
+      inputs:
+        appVpcId: ${networking.outputs["appVpcId"]}
+        appVpcPublicSubnetIds: ${networking.outputs["appVpcPublicSubnetIds"]}
+        appVpcPrivateSubnetIds: ${networking.outputs["appVpcPrivateSubnetIds"]}
+        dbName: ${dbName}
+        dbUsername: ${dbUsername}
+        dbPassword: ${database.outputs["dbPassword"]}
+        dbPort: ${database.outputs["dbPort"]}
+        dbAddress: ${database.outputs["dbAddress"]}
+
 outputs:
   networking: ${networking.outputs}
   database: ${database.outputs}
+  application: ${app.outputs}
