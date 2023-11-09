@@ -8,13 +8,14 @@ const config = new Config();
 export const dbUsername = config.require("dbUsername");
 export const dbPassword = config.requireSecret("dbPassword");
 export const dbName = config.require("dbName");
+const dataVpcPrivateSubnetIds = config.requireObject("dataVpcPrivateSubnetIds") as string[];
+const peeredSecurityGroupId = config.require("peeredSecurityGroupId");
 
 const finalSnapshotIdentifier = config.get("finalSnapshotIdentifier")
     || new random.RandomString("my-random-string", {
     length: 10,
     special: false,
 }).result;
-const networkingStack = new StackReference(config.require("networkingStack"))
 const baseTags = {
     Project: "Pulumi Demo",
     PulumiStack: getStack(),
@@ -24,7 +25,7 @@ const rds = new RdsInstance("db-instance", {
     description: `${baseTags.Project} DB Instance`,
     baseTags: baseTags,
 
-    subnetIds: networkingStack.getOutput("dataVpcPrivateSubnetIds"),
+    subnetIds: dataVpcPrivateSubnetIds,
 
     username: dbUsername,
     password: dbPassword,
@@ -40,7 +41,7 @@ const rds = new RdsInstance("db-instance", {
     sendEnhancedLogsToCloudwatch: true,
     monitoringInterval: 10,
 
-    securityGroupIds: [networkingStack.getOutput("peeredSecurityGroupId")],
+    securityGroupIds: [peeredSecurityGroupId],
 });
 
 export const dbEndpoint = rds.instanceEndpoint();

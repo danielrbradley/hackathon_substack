@@ -9,5 +9,16 @@ resources:
       inputs:
         azCount: 3
 
+  database:
+    type: pulumi:pulumi:Program
+    properties:
+      source: ./database
+      inputs:
+        dbUsername: ${dbUsername}
+        dbPassword: ${dbPassword}
+        dbName: ${dbName}
+        dataVpcPrivateSubnetIds: ${networking.outputs["dataVpcPrivateSubnetIds"]}
+        peeredSecurityGroupId: ${networking.outputs["peeredSecurityGroupId"]}
+
 outputs:
   networking: ${networking.outputs}
