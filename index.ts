@@ -1,20 +1,22 @@
 import * as pulumi from "@pulumi/pulumi";
 
-const substack1 = new pulumi.Stack("sub1", {
+const sub1 = new pulumi.Program("sub1", {
   source: "subStack",
   prefixResourceNames: true,
   inputs: {
-    stack: "MyStack",
+    stack: pulumi.getStack(),
   },
 });
 
-const substack2 = new pulumi.Stack("sub2", {
+const sub2 = new pulumi.Program("sub2", {
   source:
     "https://github.com/danielrbradley/hackathon_substack/tree/master/subStack",
   prefixResourceNames: true,
   inputs: {
-    stack: substack1.outputs.domainName,
+    stack: sub1.outputs.domainName,
   },
 });
 
-export const substack2Outputs = substack2.outputs;
+export const sub2Outputs = sub2.outputs;
+export const sub2Inputs = sub2.inputs;
+export const sub1Outputs = sub1.outputs;
