@@ -1,0 +1,13 @@
+name: aws-reference-architecture
+description: Real-world application architecture
+runtime: yaml
+resources:
+  networking:
+    type: pulumi:pulumi:Program
+    properties:
+      source: ./networking
+      inputs:
+        azCount: 3
+
+outputs:
+  networking: ${networking.outputs}
