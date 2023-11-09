@@ -6,7 +6,7 @@ resources:
     type: pulumi:pulumi:Program
     properties:
       source: static-website-aws-csharp
-      inputs:
+      config:
         path: "./site"
         indexDocument: "index.html"
 

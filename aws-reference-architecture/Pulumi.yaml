@@ -6,14 +6,14 @@ resources:
     type: pulumi:pulumi:Program
     properties:
       source: ./networking
-      inputs:
+      config:
         azCount: 3
 
   database:
     type: pulumi:pulumi:Program
     properties:
       source: ./database
-      inputs:
+      config:
         dbUsername: ${dbUsername}
         dbName: ${dbName}
         dataVpcPrivateSubnetIds: ${networking.outputs["dataVpcPrivateSubnetIds"]}
@@ -23,7 +23,7 @@ resources:
     type: pulumi:pulumi:Program
     properties:
       source: ./application
-      inputs:
+      config:
         appVpcId: ${networking.outputs["appVpcId"]}
         appVpcPublicSubnetIds: ${networking.outputs["appVpcPublicSubnetIds"]}
         appVpcPrivateSubnetIds: ${networking.outputs["appVpcPrivateSubnetIds"]}
