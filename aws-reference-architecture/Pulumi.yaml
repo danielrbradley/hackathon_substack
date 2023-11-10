@@ -15,6 +15,7 @@ resources:
       source: ./database
       config:
         dbUsername: ${dbUsername}
+        dbPassword: ${dbPassword}
         dbName: ${dbName}
         dataVpcPrivateSubnetIds: ${networking.outputs["dataVpcPrivateSubnetIds"]}
         peeredSecurityGroupId: ${networking.outputs["peeredSecurityGroupId"]}
@@ -29,7 +30,7 @@ resources:
         appVpcPrivateSubnetIds: ${networking.outputs["appVpcPrivateSubnetIds"]}
         dbName: ${dbName}
         dbUsername: ${dbUsername}
-        dbPassword: ${database.outputs["dbPassword"]}
+        dbPassword: ${dbPassword}
         dbPort: ${database.outputs["dbPort"]}
         dbAddress: ${database.outputs["dbAddress"]}
 
