@@ -3,7 +3,7 @@ import * as pulumi from "@pulumi/pulumi";
 const sub1 = new pulumi.Program("sub1", {
   source: "../subStack",
   config: {
-    stack: pulumi.getStack(),
+    myTag: pulumi.getStack(),
   },
 });
 
@@ -11,7 +11,7 @@ const sub2 = new pulumi.Program("sub2", {
   source:
     "https://github.com/danielrbradley/hackathon_substack/tree/master/subStack",
   config: {
-    stack: sub1.outputs.domainName,
+    myTag: sub1.outputs.domainName,
   },
 });
 
